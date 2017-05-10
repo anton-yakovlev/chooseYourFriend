@@ -10,6 +10,23 @@
  Зарпещено использовать встроенные методы для работы с массивами
  */
 function isAllTrue(array, fn) {
+    if (!Array.isArray(array) || !array.length) {
+        throw new Error('empty array');
+    }
+
+    if (typeof fn !== 'function') {
+        throw new Error('fn is not a function');
+    }
+
+    let result = true;
+
+    array.forEach(item => {
+        if (result && !fn(item)) {
+            result = false;
+        }
+    });
+
+    return result;
 }
 
 /*
@@ -22,6 +39,23 @@ function isAllTrue(array, fn) {
  Зарпещено использовать встроенные методы для работы с массивами
  */
 function isSomeTrue(array, fn) {
+    if (!Array.isArray(array) || !array.length) {
+        throw new Error('empty array');
+    }
+
+    if (typeof fn !== 'function') {
+        throw new Error('fn is not a function');
+    }
+
+    let result = false;
+
+    array.forEach(item => {
+        if (!result && fn(item)) {
+            result = true;
+        }
+    });
+
+    return result;
 }
 
 /*
@@ -32,7 +66,22 @@ function isSomeTrue(array, fn) {
  Необходимо выбрасывать исключение в случаях:
  - fn не является функцией (с текстом "fn is not a function")
  */
-function returnBadArguments(fn) {
+function returnBadArguments(fn, ...args) {
+    if (typeof fn !== 'function') {
+        throw new Error('fn is not a function');
+    }
+
+    let result = [];
+
+    args.forEach(item => {
+        try {
+            fn(item);
+        } catch (e) {
+            result.push(item);
+        }
+    });
+
+    return result;
 }
 
 /*
@@ -49,7 +98,67 @@ function returnBadArguments(fn) {
  - number не является числом (с текстом "number is not a number")
  - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function calculator() {
+function calculator(number = 0) {
+    if (!_isNumber(number)) {
+        throw new Error('number is not a number');
+    }
+
+    const savedNumber = number;
+
+    function _isNumber(number) {
+        return !isNaN(parseFloat(number)) && isFinite(number);
+    }
+
+    function sum(...args) {
+        let sum = 0;
+
+        args.forEach(item => {
+            sum += item;
+        });
+
+        return sum + savedNumber;
+    }
+
+    function dif(...args) {
+        let dif = 0;
+
+        args.forEach(item => {
+            dif += item;
+        });
+
+        return savedNumber - dif;
+    }
+
+    function div(...args) {
+        let result = savedNumber;
+
+        args.forEach(item => {
+            if (!item) {
+                throw new Error('division by 0');
+            }
+
+            result = result / item;
+        });
+
+        return result;
+    }
+
+    function mul(...args) {
+        let result = savedNumber;
+
+        args.forEach(item => {
+            result = result * item;
+        });
+
+        return result;
+    }
+
+    return {
+        sum: sum,
+        dif: dif,
+        div: div,
+        mul: mul
+    }
 }
 
 export {
