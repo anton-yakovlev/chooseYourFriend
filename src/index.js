@@ -5,18 +5,7 @@ function arrayLength(array) {
         throw new Error('empty array');
     }
 
-    let length = 0;
-    let doLoop = true;
-    let i = 0;
-
-    while (doLoop) {
-        if (typeof array[i] === 'undefined') {
-            doLoop = false;
-        } else {
-            i++;
-            length = i;
-        }
-    }
+    let length = Object.keys(array).length;
 
     if (!length) {
         throw new Error('empty array');
