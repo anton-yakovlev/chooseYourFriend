@@ -1,5 +1,30 @@
 /* ДЗ 2 - работа с исключениями и отладчиком */
 
+function arrayLength(array) {
+    if (!Array.isArray(array)) {
+        throw new Error('empty array');
+    }
+
+    let length = 0;
+    let doLoop = true;
+    let i = 0;
+
+    while (doLoop) {
+        if (typeof array[i] === 'undefined') {
+            doLoop = false;
+        } else {
+            i++;
+            length = i;
+        }
+    }
+
+    if (!length) {
+        throw new Error('empty array');
+    }
+
+    return length;
+}
+
 /*
  Задача 1:
  Функция принимает массив и фильтрующую фукнцию и должна вернуть true или false
@@ -10,9 +35,7 @@
  Зарпещено использовать встроенные методы для работы с массивами
  */
 function isAllTrue(array, fn) {
-    if (!Array.isArray(array) || !array.length) {
-        throw new Error('empty array');
-    }
+    let arrayLengthValue = arrayLength(array);
 
     if (typeof fn !== 'function') {
         throw new Error('fn is not a function');
@@ -20,11 +43,14 @@ function isAllTrue(array, fn) {
 
     let result = true;
 
-    array.forEach(item => {
-        if (result && !fn(item)) {
+    for (let i = 0; i < arrayLengthValue; i++) {
+        let value = array[i];
+        let fnResult = fn(value);
+
+        if (result && !fnResult) {
             result = false;
         }
-    });
+    }
 
     return result;
 }
@@ -39,9 +65,7 @@ function isAllTrue(array, fn) {
  Зарпещено использовать встроенные методы для работы с массивами
  */
 function isSomeTrue(array, fn) {
-    if (!Array.isArray(array) || !array.length) {
-        throw new Error('empty array');
-    }
+    let arrayLengthValue = arrayLength(array);
 
     if (typeof fn !== 'function') {
         throw new Error('fn is not a function');
@@ -49,11 +73,14 @@ function isSomeTrue(array, fn) {
 
     let result = false;
 
-    array.forEach(item => {
-        if (!result && fn(item)) {
+    for (let i = 0; i < arrayLengthValue; i++) {
+        let value = array[i];
+        let fnResult = fn(value);
+
+        if (!result && fnResult) {
             result = true;
         }
-    });
+    }
 
     return result;
 }
