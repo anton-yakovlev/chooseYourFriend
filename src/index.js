@@ -9,9 +9,7 @@ function forEach(array, fn) {
         return;
     }
 
-    let length = Object.keys(array).length;
-
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < array.length; i++) {
         fn(array[i], i, array);
     }
 }
@@ -25,10 +23,9 @@ function map(array, fn) {
         return;
     }
 
-    let length = Object.keys(array).length;
     let result = [];
 
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < array.length; i++) {
         result.push(fn(array[i], i, array));
     }
 
