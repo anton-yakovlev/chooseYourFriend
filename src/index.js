@@ -115,12 +115,15 @@ function deleteTextNodes(where) {
         return;
     }
 
-    const allChilds = where.childNodes;
+    const childrens = where.childNodes;
     const TEXT_NODE_TYPE = 3;
+    const COMMENT_NODE_TYPE = 8;
 
-    for (let i = 0; i < allChilds.length; i++) {
-        if (allChilds[i].nodeType === TEXT_NODE_TYPE) {
-            allChilds[i].remove();
+    for (let i = 0; i < childrens.length; i++) {
+        let child = childrens[i];
+
+        if (child.nodeType === TEXT_NODE_TYPE || child.nodeType === COMMENT_NODE_TYPE) {
+            child.remove();
         }
     }
 }
@@ -136,6 +139,31 @@ function deleteTextNodes(where) {
  * должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
 function deleteTextNodesRecursive(where) {
+    if (!where) {
+        return;
+    }
+
+    const TEXT_NODE_TYPE = 3;
+    const COMMENT_NODE_TYPE = 8;
+    const ELEMENT_NODE_TYPE = 1;
+
+    function _clean(node) {
+        let childrens = node.childNodes;
+
+        for (let i = 0; i < childrens.length; i++) {
+            let child = childrens[i];
+
+            if (child.nodeType === TEXT_NODE_TYPE || child.nodeType === COMMENT_NODE_TYPE) {
+                node.removeChild(child);
+                i--;
+
+            } else if (child.nodeType === ELEMENT_NODE_TYPE) {
+                _clean(child);
+            }
+        }
+    }
+
+    _clean(where);
 }
 
 /**
@@ -161,6 +189,43 @@ function deleteTextNodesRecursive(where) {
  * }
  */
 function collectDOMStat(root) {
+    if (!root) {
+        return;
+    }
+
+    let tagResult = {};
+    let classResult = {};
+    let textResult = 0;
+
+    const TEXT_NODE_TYPE = 3;
+    const ELEMENT_NODE_TYPE = 1;
+
+    function _analizeElement(element){
+        let childrens = element.childNodes;
+
+        tagResult[element.tagName] = 1;
+
+        for (let i = 0; i < childrens.length; i++) {
+            let child = childrens[i];
+
+            if (child.nodeType === TEXT_NODE_TYPE) {
+                textResult += 1;
+
+            } else if (child.nodeType === ELEMENT_NODE_TYPE) {
+                _analizeElement(child);
+            }
+        }
+    }
+
+    _analizeElement(root);
+
+    console.log(tagResult, classResult, textResult);
+
+    return {
+        tags: tagResult,
+        class: classResult,
+        texts: textResult
+    }
 }
 
 /**
