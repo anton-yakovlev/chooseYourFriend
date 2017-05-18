@@ -200,10 +200,38 @@ function collectDOMStat(root) {
     const TEXT_NODE_TYPE = 3;
     const ELEMENT_NODE_TYPE = 1;
 
-    function _analizeElement(element){
-        let childrens = element.childNodes;
+    function _includeTag(obj, tag) {
+        return tag in obj;
+    }
 
-        tagResult[element.tagName] = 1;
+    function _normalizeClassList(sourceArray) {
+        let result = [];
+
+        for (let i = 0; i < sourceArray.length; i++) {
+            let item = sourceArray[i];
+
+            if (result.indexOf(item) < 0) {
+                result.push(item);
+            }
+        }
+
+        return result;
+    }
+
+    function _analizeElement(element) {
+        let childrens = element.childNodes;
+        let tag = element.tagName;
+        let classes = _normalizeClassList(element.classList);
+
+        //console.log('classes', classes);
+
+        tagResult[tag] = _includeTag(tagResult, tag) ? tagResult[tag] + 1 : 1;
+
+        for (let i = 0; i < classes.length; i++) {
+            let classItem = classes[i];
+
+            classResult[classItem.toString()] = _includeTag(classResult, classItem) ? classResult[classItem] + 1 : 1;
+        }
 
         for (let i = 0; i < childrens.length; i++) {
             let child = childrens[i];
@@ -219,11 +247,9 @@ function collectDOMStat(root) {
 
     _analizeElement(root);
 
-    console.log(tagResult, classResult, textResult);
-
     return {
         tags: tagResult,
-        class: classResult,
+        classes: classResult,
         texts: textResult
     }
 }
@@ -260,6 +286,44 @@ function collectDOMStat(root) {
  * }
  */
 function observeChildNodes(where, fn) {
+    if (!where || typeof fn !== 'function') {
+        return;
+    }
+
+    const OPERATION_TYPES = {
+        INSERT: 'insert',
+        REMOVE: 'remove'
+    };
+
+    let observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            let params = {};
+
+            if (mutation.addedNodes.length) {
+                params = {
+                    type: OPERATION_TYPES.INSERT,
+                    nodes: Array.prototype.slice.call(mutation.addedNodes)
+                };
+            }
+
+            if (mutation.removedNodes.length) {
+                params = {
+                    type: OPERATION_TYPES.REMOVE,
+                    nodes: Array.prototype.slice.call(mutation.removedNodes)
+                };
+            }
+
+            fn(params);
+        });
+    });
+
+    let config = {
+        attributes: false,
+        childList: true,
+        characterData: false
+    };
+
+    observer.observe(where, config);
 }
 
 export {
