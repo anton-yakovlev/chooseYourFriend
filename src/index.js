@@ -115,12 +115,12 @@ function deleteTextNodes(where) {
         return;
     }
 
-    const childrens = where.childNodes;
+    const children = where.childNodes;
     const TEXT_NODE_TYPE = 3;
     const COMMENT_NODE_TYPE = 8;
 
-    for (let i = 0; i < childrens.length; i++) {
-        let child = childrens[i];
+    for (let i = 0; i < children.length; i++) {
+        let child = children[i];
 
         if (child.nodeType === TEXT_NODE_TYPE || child.nodeType === COMMENT_NODE_TYPE) {
             child.remove();
@@ -148,10 +148,10 @@ function deleteTextNodesRecursive(where) {
     const ELEMENT_NODE_TYPE = 1;
 
     function _clean(node) {
-        let childrens = node.childNodes;
+        let children = node.childNodes;
 
-        for (let i = 0; i < childrens.length; i++) {
-            let child = childrens[i];
+        for (let i = 0; i < children.length; i++) {
+            let child = children[i];
 
             if (child.nodeType === TEXT_NODE_TYPE || child.nodeType === COMMENT_NODE_TYPE) {
                 node.removeChild(child);
@@ -218,23 +218,28 @@ function collectDOMStat(root) {
         return result;
     }
 
-    function _analizeElement(element) {
-        let childrens = element.childNodes;
-        let tag = element.tagName;
-        let classes = _normalizeClassList(element.classList);
-
-        //console.log('classes', classes);
-
+    function _updateTagResult(tag) {
         tagResult[tag] = _includeTag(tagResult, tag) ? tagResult[tag] + 1 : 1;
+    }
 
+    function _updateClassResult(classes) {
         for (let i = 0; i < classes.length; i++) {
             let classItem = classes[i];
 
             classResult[classItem.toString()] = _includeTag(classResult, classItem) ? classResult[classItem] + 1 : 1;
         }
+    }
 
-        for (let i = 0; i < childrens.length; i++) {
-            let child = childrens[i];
+    function _analizeElement(element) {
+        let children = element.childNodes;
+        let tag = element.tagName;
+        let classes = _normalizeClassList(element.classList);
+
+        _updateTagResult(tag);
+        _updateClassResult(classes);
+
+        for (let i = 0; i < children.length; i++) {
+            let child = children[i];
 
             if (child.nodeType === TEXT_NODE_TYPE) {
                 textResult += 1;
@@ -245,7 +250,7 @@ function collectDOMStat(root) {
         }
     }
 
-    _analizeElement(root);
+    _analizeElement(root.children[0]);
 
     return {
         tags: tagResult,
@@ -295,25 +300,29 @@ function observeChildNodes(where, fn) {
         REMOVE: 'remove'
     };
 
+    function _mutationProcessing(mutation) {
+        let params = {};
+
+        if (mutation.addedNodes.length) {
+            params = {
+                type: OPERATION_TYPES.INSERT,
+                nodes: Array.prototype.slice.call(mutation.addedNodes)
+            };
+        }
+
+        if (mutation.removedNodes.length) {
+            params = {
+                type: OPERATION_TYPES.REMOVE,
+                nodes: Array.prototype.slice.call(mutation.removedNodes)
+            };
+        }
+
+        fn(params);
+    }
+
     let observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
-            let params = {};
-
-            if (mutation.addedNodes.length) {
-                params = {
-                    type: OPERATION_TYPES.INSERT,
-                    nodes: Array.prototype.slice.call(mutation.addedNodes)
-                };
-            }
-
-            if (mutation.removedNodes.length) {
-                params = {
-                    type: OPERATION_TYPES.REMOVE,
-                    nodes: Array.prototype.slice.call(mutation.removedNodes)
-                };
-            }
-
-            fn(params);
+            _mutationProcessing(mutation);
         });
     });
 
