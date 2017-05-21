@@ -23,7 +23,21 @@ let homeworkContainer = document.querySelector('#homework-container');
  * @return {Element}
  */
 function createDiv() {
+    const CLASS_NAME = 'draggable-div';
+    const INIT_VALUE = '100px';
+    const PROPERTIES = {
+        width: INIT_VALUE,
+        height: INIT_VALUE,
+        top: INIT_VALUE,
+        left: INIT_VALUE,
+        backgroundColor: '#00ffff'
+    };
+    let element = document.createElement('div');
 
+    element.classList.add(CLASS_NAME);
+    Object.assign(element.style, PROPERTIES);
+
+    return element;
 }
 
 /**
@@ -32,11 +46,41 @@ function createDiv() {
  * @param {Element} target
  */
 function addListeners(target) {
+    if (!target) {
+        return;
+    }
+
+    let isMouseDown = false;
+
+    function _mouseMove(e) {
+        let eventTop = e.clientX + 'px';
+        let eventLeft = e.clientY + 'px';
+
+        if (isMouseDown) {
+            console.log('isMouseMove', eventTop, eventLeft);
+            target.style.top = eventTop;
+            target.style.left = eventLeft;
+        }
+    }
+
+    function _mouseDown() {
+        isMouseDown = true;
+        console.log('isMouseDown : ' + isMouseDown);
+    }
+
+    function _mouseUp() {
+        isMouseDown = false;
+        console.log('isMouseUp : ' + isMouseDown);
+    }
+
+    target.addEventListener('mousedown', _mouseDown);
+    target.addEventListener('mouseup', _mouseUp);
+    target.addEventListener('mousemove', _mouseMove);
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
 
-addDivButton.addEventListener('click', function() {
+addDivButton.addEventListener('click', function () {
     // создать новый div
     let div = createDiv();
 
