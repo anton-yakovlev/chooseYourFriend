@@ -23,6 +23,7 @@ let homeworkContainer = document.querySelector('#homework-container');
  * @return {Element}
  */
 function createDiv() {
+
 }
 
 /**
