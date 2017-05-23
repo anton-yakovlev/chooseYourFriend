@@ -22,8 +22,13 @@ let homeworkContainer = document.querySelector('#homework-container');
  *
  * @return {Element}
  */
+
+function getDraggableClassName() {
+    return 'draggable-div';
+}
+
 function createDiv() {
-    const CLASS_NAME = 'draggable-div';
+    const CLASS_NAME = getDraggableClassName();
     const INIT_VALUE = '100px';
     const PROPERTIES = {
         width: INIT_VALUE,
@@ -51,31 +56,46 @@ function addListeners(target) {
     }
 
     let isMouseDown = false;
+    let eventTop;
+    let eventLeft;
+    let diffX;
+    let diffY;
+    let parent = target.parentNode;
 
     function _mouseMove(e) {
-        let eventTop = e.clientX + 'px';
-        let eventLeft = e.clientY + 'px';
-
-        if (isMouseDown) {
-            console.log('isMouseMove', eventTop, eventLeft);
-            target.style.top = eventTop;
-            target.style.left = eventLeft;
+        if (!isMouseDown) {
+            return;
         }
+
+        eventTop = e.clientY;
+        eventLeft = e.clientX;
     }
 
-    function _mouseDown() {
+    function _mouseDown(e) {
+        const CLASS_NAME = getDraggableClassName();
+
+        if (!e.target.classList.contains(CLASS_NAME)) {
+            return;
+        }
+
         isMouseDown = true;
-        console.log('isMouseDown : ' + isMouseDown);
+        diffX = e.offsetX;
+        diffY = e.offsetY;
     }
 
     function _mouseUp() {
+        if (!isMouseDown) {
+            return;
+        }
+
         isMouseDown = false;
-        console.log('isMouseUp : ' + isMouseDown);
+        target.style.top = eventTop - diffY + 'px';
+        target.style.left = eventLeft - diffX + 'px';
     }
 
-    target.addEventListener('mousedown', _mouseDown);
-    target.addEventListener('mouseup', _mouseUp);
-    target.addEventListener('mousemove', _mouseMove);
+    parent.addEventListener('mousedown', _mouseDown);
+    parent.addEventListener('mouseup', _mouseUp);
+    parent.addEventListener('mousemove', _mouseMove);
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
@@ -90,6 +110,8 @@ addDivButton.addEventListener('click', function () {
     addListeners(div);
     // можно не назначать обработчики событий каждому div в отдельности, а использовать делегирование
     // или использовать HTML5 D&D - https://www.html5rocks.com/ru/tutorials/dnd/basics/
+
+    // codepen.com implementation - https://codepen.io/anton_yakovlev/pen/wdQdJP?editors=0010
 });
 
 export {
