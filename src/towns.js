@@ -36,6 +36,34 @@ let homeworkContainer = document.querySelector('#homework-container');
  * @return {Promise<Array<{name: string}>>}
  */
 function loadTowns() {
+    const URL = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
+    let xhr = new XMLHttpRequest();
+
+    xhr.open('GET', URL, false);
+    xhr.send();
+
+    return new Promise((resolve, reject) => {
+        if (xhr.status < 400) {
+            let responseText = JSON.parse(xhr.responseText);
+            let citiesArray = [];
+
+            for (let item of responseText) {
+                citiesArray.push(item);
+            }
+
+            citiesArray.sort((a, b) => {
+                if (a.name < b.name) {
+                    return -1;
+                } else if (a.name > b.name) {
+                    return 1;
+                }
+            });
+
+            resolve(citiesArray);
+        } else {
+            reject();
+        }
+    });
 }
 
 /**
@@ -52,6 +80,7 @@ function loadTowns() {
  * @return {boolean}
  */
 function isMatching(full, chunk) {
+    return full.toLowerCase().indexOf(chunk.toLowerCase()) >= 0;
 }
 
 let loadingBlock = homeworkContainer.querySelector('#loading-block');
@@ -60,7 +89,24 @@ let filterInput = homeworkContainer.querySelector('#filter-input');
 let filterResult = homeworkContainer.querySelector('#filter-result');
 let townsPromise;
 
-filterInput.addEventListener('keyup', function() {
+function showFilteresCities(cities, chunk) {
+    let result = [];
+
+    for (let city of cities) {
+        if (isMatching(city.name, chunk)) {
+            result.push(city.name);
+        }
+    }
+
+    filterResult.append(result.toString());
+}
+
+loadTowns().then((cities) => {
+    filterInput.addEventListener('keyup', function () {
+        let inputValue = filterInput.value;
+
+        showFilteresCities(cities, inputValue);
+    });
 });
 
 export {
