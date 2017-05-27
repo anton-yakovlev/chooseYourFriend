@@ -88,51 +88,64 @@ function showFilteredCities(cities, chunk) {
 
     for (let city of cities) {
         if (isMatching(city.name, chunk)) {
-            resultHtml += '<span>' + city.name + '</span>';
+            resultHtml += '<span>' + city.name + ' ' + '</span>';
         }
     }
 
     filterResult.innerHTML = resultHtml;
 }
 
-/* function loading() {
-    const loadingTitle = 'Загрузка...';
+function loading() {
+    filterBlock.style.display = 'none';
+    loadingBlock.style.display = 'block';
+}
 
-    loadingBlock.textContent(loadingTitle);
-}*/
-
-/* function loadingSucceed() {
-    loadingBlock.remove();
-}*/
+function loadingSucceed() {
+    filterBlock.style.display = 'block';
+    loadingBlock.style.display = 'none';
+}
 
 function loadingFailed() {
-    // const errorMsg = 'Не удалось загрузить города';
+    const errorMsgHtml = '<div>Не удалось загрузить города</div>';
     const repeatText = 'Повторить';
     const button = document.createElement('button');
 
+    loadingBlock.style.display = 'none';
+    errorBlock.innerHTML = '';
     button.innerText = repeatText;
+    errorBlock.innerHTML = errorMsgHtml;
+    errorBlock.append(button);
 
+    button.addEventListener('click', () => {
+        start();
+    });
 }
 
-// let loadingBlock = homeworkContainer.querySelector('#loading-block');
-// let filterBlock = homeworkContainer.querySelector('#filter-block');
+function start() {
+    loading();
+
+    loadTowns().then(
+        (cities) => {
+            loadingSucceed();
+            filterInput.addEventListener('keyup', () => {
+                let inputValue = filterInput.value;
+
+                showFilteredCities(cities, inputValue);
+            });
+        },
+        () => {
+            loadingFailed();
+        }
+    );
+}
+
+let loadingBlock = homeworkContainer.querySelector('#loading-block');
+let filterBlock = homeworkContainer.querySelector('#filter-block');
 let filterInput = homeworkContainer.querySelector('#filter-input');
 let filterResult = homeworkContainer.querySelector('#filter-result');
+let errorBlock = homeworkContainer.querySelector('#error-block');
 
-loadTowns().then(
-    (cities) => {
-        // loadingSucceed();
-
-        filterInput.addEventListener('keyup', () => {
-            let inputValue = filterInput.value;
-
-            showFilteredCities(cities, inputValue);
-        });
-    },
-    () => {
-        loadingFailed();
-    }
-);
+start();
 
 export {
     loadTowns,
