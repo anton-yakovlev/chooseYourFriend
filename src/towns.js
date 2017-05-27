@@ -80,34 +80,59 @@ function loadTowns() {
  * @return {boolean}
  */
 function isMatching(full, chunk) {
-    return full.toLowerCase().indexOf(chunk.toLowerCase()) >= 0;
+    return full.toLowerCase().indexOf(chunk.toLowerCase()) >= 0 && !!chunk;
 }
 
-let loadingBlock = homeworkContainer.querySelector('#loading-block');
-let filterBlock = homeworkContainer.querySelector('#filter-block');
-let filterInput = homeworkContainer.querySelector('#filter-input');
-let filterResult = homeworkContainer.querySelector('#filter-result');
-let townsPromise;
-
-function showFilteresCities(cities, chunk) {
-    let result = [];
+function showFilteredCities(cities, chunk) {
+    let resultHtml = '';
 
     for (let city of cities) {
         if (isMatching(city.name, chunk)) {
-            result.push(city.name);
+            resultHtml += '<span>' + city.name + '</span>';
         }
     }
 
-    filterResult.append(result.toString());
+    filterResult.innerHTML = resultHtml;
 }
 
-loadTowns().then((cities) => {
-    filterInput.addEventListener('keyup', function () {
-        let inputValue = filterInput.value;
+/* function loading() {
+    const loadingTitle = 'Загрузка...';
 
-        showFilteresCities(cities, inputValue);
-    });
-});
+    loadingBlock.textContent(loadingTitle);
+}*/
+
+/* function loadingSucceed() {
+    loadingBlock.remove();
+}*/
+
+function loadingFailed() {
+    // const errorMsg = 'Не удалось загрузить города';
+    const repeatText = 'Повторить';
+    const button = document.createElement('button');
+
+    button.innerText = repeatText;
+
+}
+
+// let loadingBlock = homeworkContainer.querySelector('#loading-block');
+// let filterBlock = homeworkContainer.querySelector('#filter-block');
+let filterInput = homeworkContainer.querySelector('#filter-input');
+let filterResult = homeworkContainer.querySelector('#filter-result');
+
+loadTowns().then(
+    (cities) => {
+        // loadingSucceed();
+
+        filterInput.addEventListener('keyup', () => {
+            let inputValue = filterInput.value;
+
+            showFilteredCities(cities, inputValue);
+        });
+    },
+    () => {
+        loadingFailed();
+    }
+);
 
 export {
     loadTowns,
