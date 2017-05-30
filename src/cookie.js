@@ -32,15 +32,77 @@
  * @example
  * homeworkContainer.appendChild(...);
  */
+
+function isInList(name) {
+    return cookiesList.some(item => item.name === name);
+}
+
+function addBrowserCookie(name, value){
+    document.cookie = name + '=' + value;
+}
+
+function deleteBrowserCookie(name){
+    let date = new Date;
+
+    date.setDate(date.getDate() - 1);
+    document.cookie = name + '=' + ';expires=' + date;
+}
+
+function deleteCookieFromList(name){
+    let listElement = listTable.querySelector('[data-cookie-name="' + name + '"]');
+
+    listElement.remove();
+    cookiesList = cookiesList.filter(item => item.name !== name);
+}
+
+function addCookieToList(name, value) {
+    let element = document.createElement('tr');
+
+    element.setAttribute('data-cookie-name', name);
+    element.innerHTML = '<td>' + name + '</td><td>' + value + '</td><td><button id="' +
+        name + '-' + value + '" class="remove-button">Delete</button></td>';
+
+    listTable.appendChild(element);
+    cookiesList.push({name: name, value: value});
+}
+
+function createCookie(name, value) {
+    if (!isInList(name)) {
+        addCookieToList(name, value);
+    }
+
+    addBrowserCookie(name, value);
+}
+
+function deleteCookie(name) {
+    deleteBrowserCookie(name);
+    deleteCookieFromList(name);
+}
+
+const ADD_BUTTON_ID = 'add-button';
+const REMOVE_BUTTON_CLASS = 'remove-button';
 let homeworkContainer = document.querySelector('#homework-container');
 let filterNameInput = homeworkContainer.querySelector('#filter-name-input');
 let addNameInput = homeworkContainer.querySelector('#add-name-input');
 let addValueInput = homeworkContainer.querySelector('#add-value-input');
-let addButton = homeworkContainer.querySelector('#add-button');
 let listTable = homeworkContainer.querySelector('#list-table tbody');
+let cookiesList = [];
 
-filterNameInput.addEventListener('keyup', function() {
+filterNameInput.addEventListener('keyup', () => {
 });
 
-addButton.addEventListener('click', () => {
+homeworkContainer.addEventListener('click', (e) => {
+    let target = e.target;
+
+    if (target.id === ADD_BUTTON_ID) {
+        createCookie(addNameInput.value, addValueInput.value);
+        //console.log(document.cookie);
+    }
+
+    if (target.classList.contains(REMOVE_BUTTON_CLASS)) {
+        let cookieName = target.id.split('-')[0];
+
+        deleteCookie(cookieName);
+        //console.log(document.cookie);
+    }
 });
