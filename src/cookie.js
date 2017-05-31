@@ -33,26 +33,29 @@
  * homeworkContainer.appendChild(...);
  */
 
-function isInList(name) {
+function isCreatedCookie(name) {
     return cookiesList.some(item => item.name === name);
 }
 
-function addBrowserCookie(name, value){
+function addBrowserCookie(name, value) {
     document.cookie = name + '=' + value;
 }
 
-function deleteBrowserCookie(name){
+function deleteBrowserCookie(name) {
     let date = new Date;
 
     date.setDate(date.getDate() - 1);
     document.cookie = name + '=' + ';expires=' + date;
 }
 
-function deleteCookieFromList(name){
+function deleteCookieFromList(name) {
     let listElement = listTable.querySelector('[data-cookie-name="' + name + '"]');
 
+    if (!listElement) {
+        return;
+    }
+
     listElement.remove();
-    cookiesList = cookiesList.filter(item => item.name !== name);
 }
 
 function addCookieToList(name, value) {
@@ -60,27 +63,72 @@ function addCookieToList(name, value) {
 
     element.setAttribute('data-cookie-name', name);
     element.innerHTML = '<td>' + name + '</td><td>' + value + '</td><td><button id="' +
-        name + '-' + value + '" class="remove-button">Delete</button></td>';
+        name + '" class="remove-button">Delete</button></td>';
 
     listTable.appendChild(element);
-    cookiesList.push({name: name, value: value});
+}
+
+function getBrowserCookies() {
+    return document.cookie.split('; ').map((item) => {
+        return { name: item.split('=')[0], value: item.split('=')[1] };
+    });
 }
 
 function createCookie(name, value) {
-    if (!isInList(name)) {
-        addCookieToList(name, value);
-    }
-
     addBrowserCookie(name, value);
+
+    if (!isCreatedCookie(name)) {
+        let itemObj = { name: name, value: value };
+        let searchValue = filterNameInput.value;
+
+        cookiesList.push(itemObj);
+
+        if (hasSubstring(itemObj, searchValue)) {
+            addCookieToList(name, value);
+        }
+    } else {
+        updateCookieList(filterNameInput.value);
+    }
 }
 
 function deleteCookie(name) {
+    let itemIndex = cookiesList.findIndex(item => item.name === name);
+
     deleteBrowserCookie(name);
     deleteCookieFromList(name);
+    cookiesList.splice(itemIndex, 1);
+}
+
+function hasSubstring(item, searchValue) {
+    return item.name.indexOf(searchValue) >= 0 || item.value.indexOf(searchValue) >= 0;
+}
+
+function clearList() {
+    while (listTable.firstChild) {
+        listTable.removeChild(listTable.firstChild);
+    }
+}
+
+function updateCookieList(searchValue) {
+    let browserCookies = getBrowserCookies();
+    let addedCookies = browserCookies.filter((item) => {
+        return isCreatedCookie(item.name)
+    });
+
+    clearList();
+
+    for (let item of addedCookies) {
+        if (!hasSubstring(item, searchValue)) {
+            deleteCookieFromList(item.name);
+        } else {
+            addCookieToList(item.name, item.value);
+        }
+    }
 }
 
 const ADD_BUTTON_ID = 'add-button';
 const REMOVE_BUTTON_CLASS = 'remove-button';
+
 let homeworkContainer = document.querySelector('#homework-container');
 let filterNameInput = homeworkContainer.querySelector('#filter-name-input');
 let addNameInput = homeworkContainer.querySelector('#add-name-input');
@@ -89,20 +137,23 @@ let listTable = homeworkContainer.querySelector('#list-table tbody');
 let cookiesList = [];
 
 filterNameInput.addEventListener('keyup', () => {
+    updateCookieList(filterNameInput.value);
 });
 
 homeworkContainer.addEventListener('click', (e) => {
     let target = e.target;
 
     if (target.id === ADD_BUTTON_ID) {
+        if (typeof addNameInput.value === 'undefined' || addNameInput.value.trim() === '') {
+            return;
+        }
+
         createCookie(addNameInput.value, addValueInput.value);
-        //console.log(document.cookie);
     }
 
     if (target.classList.contains(REMOVE_BUTTON_CLASS)) {
-        let cookieName = target.id.split('-')[0];
+        let cookieName = target.id;
 
         deleteCookie(cookieName);
-        //console.log(document.cookie);
     }
 });
