@@ -1,3 +1,4 @@
+
 /* ДЗ 7.1 - BOM */
 
 /**
@@ -50,4 +51,5 @@ export {
     closeWindow,
     createCookie,
     deleteCookie
+
 };
