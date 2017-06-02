@@ -1,56 +1,55 @@
-/* ДЗ 6.1 - Асинхронность и работа с сетью */
+
+/* ДЗ 7.1 - BOM */
 
 /**
- * Функция должна создавать Promise, который должен быть resolved через seconds секунду после создания
+ * Функция должна создавать окно с указанным именем и размерами
  *
- * @param {number} seconds - количество секунд, через которое Promise должен быть resolved
- * @return {Promise}
+ * @param {number} name - имя окна
+ * @param {number} width - ширина окна
+ * @param {number} height - высота окна
+ * @return {Window}
  */
-function delayPromise(seconds) {
-    return new Promise(resolve => {
-        setTimeout(resolve, seconds * 1000);
-    });
+function createWindow(name, width = 'auto', height = 'auto') {
+    let params = 'width=' + width + ',height=' + height;
+
+    return window.open('', name, params);
 }
 
 /**
- * Функция должна вернуть Promise, который должен быть разрешен массивом городов, загруженным из
- * https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json
- * Элементы полученного массива должны быть отсортированы по имени города
+ * Функция должна закрывать указанное окно
  *
- * @return {Promise<Array<{name: String}>>}
+ * @param {Window} window - окно, размер которого надо изменить
  */
-function loadAndSortTowns() {
-    const URL = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
-    let xhr = new XMLHttpRequest();
+function closeWindow(window) {
+    window.close();
+}
 
-    xhr.open('GET', URL, false);
-    xhr.send();
+/**
+ * Функция должна создавать cookie с указанными именем и значением
+ *
+ * @param name - имя
+ * @param value - значение
+ */
+function createCookie(name, value) {
+    document.cookie = name + '=' + value;
+}
 
-    return new Promise((resolve, reject) => {
-        if (xhr.status < 400) {
-            let responseText = JSON.parse(xhr.responseText);
-            let citiesArray = [];
+/**
+ * Функция должна удалять cookie с указанным именем
+ *
+ * @param name - имя
+ */
+function deleteCookie(name) {
+    let date = new Date;
 
-            for (let item of responseText) {
-                citiesArray.push(item);
-            }
-
-            citiesArray.sort((a, b) => {
-                if (a.name < b.name) {
-                    return -1;
-                } else if (a.name > b.name) {
-                    return 1;
-                }
-            });
-
-            resolve(citiesArray);
-        } else {
-            reject();
-        }
-    });
+    date.setDate(date.getDate() - 1);
+    document.cookie = name + '=' + ';expires=' + date;
 }
 
 export {
-    delayPromise,
-    loadAndSortTowns
+    createWindow,
+    closeWindow,
+    createCookie,
+    deleteCookie
+
 };
