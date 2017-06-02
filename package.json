@@ -1,16 +1,14 @@
 {
-  "name": "loftschool-example",
+  "name": "chooseYourFriend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "codestyle": "eslint src test",
-    "travis": "npm run codestyle && npm test",
+    "codestyle": "eslint src",
+    "travis": "npm run codestyle",
     "build": "webpack --progress --colors",
     "watch": "webpack-dev-server --progress --colors --open",
-    "start": "npm run watch",
-    "test": "karma start",
-    "cover": "istanbul cover _mocha -- test/*.js"
+    "start": "npm run watch"
   },
   "author": "",
   "license": "MIT",
@@ -30,20 +28,7 @@
     "webpack": "^2.2.0"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
     "eslint": "^3.13.1",
-    "istanbul": "^0.4.5",
-    "istanbul-instrumenter-loader": "^2.0.0",
-    "karma": "^1.4.0",
-    "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^2.0.0",
-    "karma-coverage-istanbul-reporter": "^1.2.0",
-    "karma-firefox-launcher": "^1.0.0",
-    "karma-mocha": "^1.3.0",
-    "karma-mocha-reporter": "^2.2.2",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^2.0.1",
-    "mocha": "^3.2.0",
     "webpack-dev-server": "^1.16.2"
   }
 }
