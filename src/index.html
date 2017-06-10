@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>chooseYourFriend App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="friend-app">
+        <div class="friend-app__header">
+            <div class="friend-app__header-title">Выберете друзей</div>
+        </div>
+        <div class="friend-app__body">
+            <div class="friend-app__search-panel">
+                <div class="friend-app__search-panel-item">
+                    <input id="searchAllFriendsInput" placeholder="Начтите вводить имя друга"
+                           class="friend-app__search-input">
+                </div>
+                <div class="friend-app__search-panel-item">
+                    <input id="searchListFriendsInput" placeholder="Начтите вводить имя друга"
+                           class="friend-app__search-input">
+                </div>
+            </div>
+            <div class="friend-app__columns">
+                <div class="friend-app__columns-item">
+                    <div class="friend-app__columns-item-header">
+                        <h2 class="friend-app__columns-item-header-title">Ваши друзья</h2>
+                    </div>
+                    <div class="friend-app__columns-item-body">
+                        <div class="user-list">
+                            <div class="user-list__item">
+                                <div class="user-list__item-avatar"><img src="" alt="" class="user-list__item-avatar-image">
+                                </div>
+                                <div class="user-list__item-data">
+                                    <div class="user-list__item-name"></div>
+                                </div>
+                                <div class="user-list__item-add"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="friend-app__columns-item">
+                    <div class="friend-app__columns-item-header">
+                        <h2 class="friend-app__columns-item-header-title">Друзья в списке</h2>
+                    </div>
+                    <div class="friend-app__columns-item-body">
+                        <div class="user-list">
+                            <div class="user-list__item">
+                                <div class="user-list__item-avatar"><img src="" alt="" class="user-list__item-avatar-image">
+                                </div>
+                                <div class="user-list__item-data">
+                                    <div class="user-list__item-name"></div>
+                                </div>
+                                <div class="user-list__item-add"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="friend-app__footer">
+            <button id="saveButton" class="btn">Сохранить</button>
+        </div>
+    </div>
+    <script src="./js/script.js"></script>
+</body>
+</html>

@@ -1,52 +1,42 @@
 doctype html
-html(lang="ru-RU")
+html(lang='ru-RU')
     head
-        include head
+        meta(charset='UTF-8')
+        meta(name='viewport', content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0')
+        meta(http-equiv='x-ua-compatible', content='ie=edge')
+        title chooseYourFriend App
     body
         .friend-app
             .friend-app__header
                 .friend-app__header-title Выберете друзей
-
             .friend-app__body
                 .friend-app__search-panel
                     .friend-app__search-panel-item
-                        input.friend-app__search-input#searchAllFriendsInput(placeholder="Начтите вводить имя друга")
-
+                        input#searchAllFriendsInput.friend-app__search-input(placeholder='Начтите вводить имя друга')
                     .friend-app__search-panel-item
-                        input.friend-app__search-input#searchListFriendsInput(placeholder="Начтите вводить имя друга")
-
+                        input#searchListFriendsInput.friend-app__search-input(placeholder='Начтите вводить имя друга')
                 .friend-app__columns
                     .friend-app__columns-item
                         .friend-app__columns-item-header
                             h2.friend-app__columns-item-header-title Ваши друзья
-
                         .friend-app__columns-item-body
                             .user-list
                                 .user-list__item
                                     .user-list__item-avatar
-                                        img.user-list__item-avatar-image(src="" alt="")
-
+                                        img.user-list__item-avatar-image(src='', alt='')
                                     .user-list__item-data
                                         .user-list__item-name
-
                                     .user-list__item-add
-
                     .friend-app__columns-item
                         .friend-app__columns-item-header
                             h2.friend-app__columns-item-header-title Друзья в списке
-
                         .friend-app__columns-item-body
                             .user-list
                                 .user-list__item
                                     .user-list__item-avatar
-                                        img.user-list__item-avatar-image(src="" alt="")
-
+                                        img.user-list__item-avatar-image(src='', alt='')
                                     .user-list__item-data
                                         .user-list__item-name
-
                                     .user-list__item-add
-
             .friend-app__footer
-                button.btn#saveButton Сохранить
-
-        script(src="./js/script.js")
+                button#saveButton.btn Сохранить

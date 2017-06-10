@@ -1,21 +1,13 @@
 let webpack = require('webpack');
 let HtmlPlugin = require('html-webpack-plugin');
-let CleanWebpackPlugin = require('clean-webpack-plugin');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
+let CleanWebpackPlugin = require('clean-webpack-plugin');
 let loaders = require('./webpack.config.loaders')();
 let path = require('path');
 
-loaders.push({
-    test: /\.css$/,
-    loader: ExtractTextPlugin.extract({
-        fallbackLoader: 'style-loader',
-        loader: 'css-loader'
-    })
-});
-
 module.exports = {
     entry: {
-        main: './src/index.js'
+        main: './src/js/index.js'
     },
     output: {
         filename: '[name].[hash].js',
@@ -32,6 +24,10 @@ module.exports = {
                 drop_debugger: false
             }
         }),
-        new CleanWebpackPlugin(['dist'])
+        new CleanWebpackPlugin(['dist']),
+        new ExtractTextPlugin('style.css'),
+        new HtmlPlugin({
+            template: 'src/pug/index.pug'
+        })
     ]
 };
