@@ -8,28 +8,32 @@ html(lang='ru-RU')
     body
         .friend-app
             .friend-app__header
-                .friend-app__header-title Выберете друзей
+                h1.friend-app__header-title Выберете друзей
             .friend-app__body
-                .friend-app__search-panel
-                    .friend-app__search-panel-item
-                        input#searchAllFriendsInput.friend-app__search-input(placeholder='Начтите вводить имя друга')
-                    .friend-app__search-panel-item
-                        input#searchListFriendsInput.friend-app__search-input(placeholder='Начтите вводить имя друга')
                 .friend-app__columns
                     .friend-app__columns-item
+                        .friend-app__search-panel
+                            input#searchAllFriendsInput.friend-app__search-input(placeholder='Начтите вводить имя друга')
+
                         .friend-app__columns-item-header
                             h2.friend-app__columns-item-header-title Ваши друзья
+
                         .friend-app__columns-item-body
-                            .user-list
-                                .user-list__item
+                            ul.user-list
+                                li.user-list__item
                                     .user-list__item-avatar
                                         img.user-list__item-avatar-image(src='', alt='')
                                     .user-list__item-data
-                                        .user-list__item-name
+                                        .user-list__item-name Anton Yakovlev
                                     .user-list__item-add
+
                     .friend-app__columns-item
+                        .friend-app__search-panel
+                            input#searchListFriendsInput.friend-app__search-input(placeholder='Начтите вводить имя друга')
+
                         .friend-app__columns-item-header
                             h2.friend-app__columns-item-header-title Друзья в списке
+
                         .friend-app__columns-item-body
                             .user-list
                                 .user-list__item
