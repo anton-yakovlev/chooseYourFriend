@@ -17,6 +17,9 @@ module.exports = {
     module: {
         loaders
     },
+    node: {
+        fs: "empty"
+    },
     plugins: [
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: true,

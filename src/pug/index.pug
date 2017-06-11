@@ -5,6 +5,7 @@ html(lang='ru-RU')
         meta(name='viewport', content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0')
         meta(http-equiv='x-ua-compatible', content='ie=edge')
         title chooseYourFriend App
+        script(src="http://vk.com/js/api/openapi.js")
     body
         .friend-app
             .friend-app__header
@@ -19,13 +20,8 @@ html(lang='ru-RU')
                             h2.friend-app__columns-item-header-title Ваши друзья
 
                         .friend-app__columns-item-body
-                            ul.user-list
-                                li.user-list__item
-                                    .user-list__item-avatar
-                                        img.user-list__item-avatar-image(src='', alt='')
-                                    .user-list__item-data
-                                        .user-list__item-name Anton Yakovlev
-                                    .user-list__item-add
+                            .friend-app__columns-item-body-inner
+                                ul.user-list#allFriendsList
 
                     .friend-app__columns-item
                         .friend-app__search-panel
@@ -35,12 +31,7 @@ html(lang='ru-RU')
                             h2.friend-app__columns-item-header-title Друзья в списке
 
                         .friend-app__columns-item-body
-                            .user-list
-                                .user-list__item
-                                    .user-list__item-avatar
-                                        img.user-list__item-avatar-image(src='', alt='')
-                                    .user-list__item-data
-                                        .user-list__item-name
-                                    .user-list__item-add
+                            .friend-app__columns-item-body-inner
+
             .friend-app__footer
                 button#saveButton.btn Сохранить
