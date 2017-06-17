@@ -1,44 +1,88 @@
 const friendApp = (function () {
-    function init() {
+    function _init() {
+        // ----- Put styles to webpack build ----- //
         require('normalize.css');
         require('../css/styles.scss');
-        const Handlebars = require('handlebars');
 
-        const vkHelper = require('./vk');
+        // ----- Get Helpers and required libraries and init variables ----- //
+        const vkHelper = require('./vkHelper');
+        const dndHelper = require('./dndHelper');
+        const storageHelper = require('./storageHelper');
+        const viewHelper = require('./viewHelper');
 
-        const template = `
-        <li class="user-list__item">
-            <div class="user-list__item-avatar">
-                <img src="{{photo_200}}" alt="" class="user-list__item-avatar-image">
-            </div>
-            <div class="user-list__item-data">
-                <div class="user-list__item-name">{{first_name}} {{last_anme}}</div>
-            </div>
-            <div class="user-list__item-add"></div>
-        </li>
-        `;
+        return {
+            vkHelper: vkHelper,
+            dndHelper: dndHelper,
+            storageHelper: storageHelper,
+            viewHelper: viewHelper
+        };
+    }
 
+    // ----- Click listeners for all elements with delegation ----- //
+    function clickListeners(helpers) {
+        const friendItemClassName = 'user-list__item';
+        const plusClassName = 'user-list__item-add';
+        const removeClassName = 'user-list__item-remove';
+        const reloadAfterErrorId = 'reloadAfterError';
+
+        function clickHandler(e) {
+            let target = e.target;
+
+            // ----- Click listener for plus button ----- //
+            if (target.classList.contains(plusClassName)) {
+                let currentFriendId = target.closest(friendItemClassName).dataset.id;
+
+                helpers.setToSavedFriends(currentFriendId);
+            }
+
+            // ----- Click listener for remove button ----- //
+            if (target.classList.contains(removeClassName)) {
+                let currentFriendId = target.closest(friendItemClassName).dataset.id;
+
+                helpers.setToAllFriends(currentFriendId);
+            }
+
+            // ----- Click listener for reload button after error ----- //
+            if (target.id === reloadAfterErrorId) {
+                location.reload();
+            }
+        }
+
+        document.body.addEventListener('click', clickHandler);
+    }
+
+    // ----- General entry for application ----- //
+    function start() {
+        // ----- Get all helpers and services ----- //
+        const helpers = _init();
+
+        // ----- Start all listeners ----- //
+        clickListeners();
+
+        // ----- Load VK friends and generate DOM elements ----- //
         new Promise(resolve => window.onload = resolve)
-            .then(() => vkHelper.init(VK))
-            .then(() => vkHelper.api('friends.get', {user_id: 10000, fields: 'photo_200,city,country'}, VK))
-            .then(friends => {
-                let allFriendsListElement = document.getElementById('allFriendsList');
-                let html;
-                let templateFn = Handlebars.compile(template);
-
-                friends.items.forEach((friend) => {
-                    html += templateFn(friend);
-                });
-
-                allFriendsListElement.innerHTML = html;
+            .then(() => helpers.vkHelper.init(VK))
+            .then(() => {
+                return helpers.vkHelper.api('friends.get', {user_id: 10000, fields: 'id,photo_200,city,country'}, VK)
             })
-            .catch(e => console.log('Ошибка: ' + e.message));
+            .then(friends => helpers.viewHelper.showFriends(friends))
+            .catch(e => errorShow(e.message));
+    }
+
+    function errorShow(message) {
+        const helpers = _init();
+
+        helpers.viewHelper.showError(message);
     }
 
     return {
-        init: init
+        start: start,
+        errorShow: errorShow
     }
-})
-();
+})();
 
-friendApp.init();
+try {
+    friendApp.start();
+} catch (e) {
+    friendApp.errorShow(e.message);
+}
