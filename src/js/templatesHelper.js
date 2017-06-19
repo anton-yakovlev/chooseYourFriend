@@ -9,7 +9,7 @@ function templatesHelper() {
             <div class="user-list__item-data">
                 <div class="user-list__item-name">{{first_name}} {{last_anme}}</div>
             </div>
-            <div class="user-list__item-action user-list__item_{{action}}"></div>
+            <div class="user-list__item-action user-list__item-action_{{action}}"></div>
         </li>
         `;
     }

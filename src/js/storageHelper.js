@@ -27,6 +27,8 @@ function storageHelper() {
     function setToSavedFriends(id) {
         let savedFriends = getSavedFriends();
 
+        // console.log('setToSavedFriends', savedFriends, savedFriends.indexOf(id) >= 0);
+
         if (savedFriends.indexOf(id) >= 0) {
             return;
         }
@@ -34,6 +36,8 @@ function storageHelper() {
         removeFromAllFriends(id);
         savedFriends.push(id);
         updateLocalStorage(LOCAL_STORAGE_NAMES.SAVED, savedFriends);
+
+        // console.log('setToSavedFriends', savedFriends, LOCAL_STORAGE_NAMES.SAVED);
     }
 
     function setToAllFriends(id) {
@@ -64,7 +68,7 @@ function storageHelper() {
         updateLocalStorage(LOCAL_STORAGE_NAMES.ALL, allFriends);
     }
 
-    function updateLocalStorage(type, model) {
+    function updateLocalStorage(type, model) { // eslint-disable-line
         // Update local storage with type and model
     }
 

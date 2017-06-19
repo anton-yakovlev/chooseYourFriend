@@ -21,8 +21,8 @@ const friendApp = (function () {
     // ----- Click listeners for all elements with delegation ----- //
     function clickListeners(helpers) {
         const friendItemClassName = 'user-list__item';
-        const plusClassName = 'user-list__item-add';
-        const removeClassName = 'user-list__item-remove';
+        const plusClassName = 'user-list__item-action_add';
+        const removeClassName = 'user-list__item-action_remove';
         const reloadAfterErrorId = 'reloadAfterError';
 
         function clickHandler(e) {
@@ -30,16 +30,17 @@ const friendApp = (function () {
 
             // ----- Click listener for plus button ----- //
             if (target.classList.contains(plusClassName)) {
-                let currentFriendId = target.closest(friendItemClassName).dataset.id;
+                let currentFriendId = target.closest('.' + friendItemClassName).dataset.id;
 
-                helpers.setToSavedFriends(currentFriendId);
+                helpers.storageHelper.setToSavedFriends(currentFriendId);
             }
 
             // ----- Click listener for remove button ----- //
             if (target.classList.contains(removeClassName)) {
-                let currentFriendId = target.closest(friendItemClassName).dataset.id;
+                let currentFriendId = target.closest('.' + friendItemClassName).dataset.id;
 
-                helpers.setToAllFriends(currentFriendId);
+                helpers.storageHelper.setToAllFriends(currentFriendId);
+                // helpers.viewHelper.addToSavedFriends({first_name: Bla, last_name: Bla});
             }
 
             // ----- Click listener for reload button after error ----- //
@@ -57,15 +58,15 @@ const friendApp = (function () {
         const helpers = _init();
 
         // ----- Start all listeners ----- //
-        clickListeners();
+        clickListeners(helpers);
 
         // ----- Load VK friends and generate DOM elements ----- //
         new Promise(resolve => window.onload = resolve)
-            .then(() => helpers.vkHelper.init(VK))
+            .then(() => helpers.vkHelper.init(VK)) // eslint-disable-line
             .then(() => {
-                return helpers.vkHelper.api('friends.get', {user_id: 10000, fields: 'id,photo_200,city,country'}, VK)
+                return helpers.vkHelper.api('friends.get', {user_id: 10000, fields: 'id,photo_200,city,country'}, VK) // eslint-disable-line
             })
-            .then(friends => helpers.viewHelper.showFriends(friends))
+            .then(friends => helpers.viewHelper.showAllFriends(friends))
             .catch(e => errorShow(e.message));
     }
 
