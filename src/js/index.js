@@ -64,7 +64,10 @@ const friendApp = (function () {
         new Promise(resolve => window.onload = resolve)
             .then(() => helpers.vkHelper.init(VK)) // eslint-disable-line
             .then(() => {
-                return helpers.vkHelper.api('friends.get', {user_id: 10000, fields: 'id,photo_200,city,country'}, VK) // eslint-disable-line
+                return helpers.vkHelper.api('friends.get', {
+                    user_id: 10000,
+                    fields: 'id,photo_200,city,country'
+                }, VK) // eslint-disable-line
             })
             .then(friends => helpers.viewHelper.showAllFriends(friends))
             .catch(e => errorShow(e.message));

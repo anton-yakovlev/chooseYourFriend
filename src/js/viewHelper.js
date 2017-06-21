@@ -15,6 +15,10 @@ function viewHelper() {
     }
 
     function _generateFriend(friend, action) {
+        if (!friend) {
+            return;
+        }
+        
         let helpers = _init();
         let templateFn = helpers.handlebars.compile(helpers.templatesHelper.getFriendTemplate());
 
