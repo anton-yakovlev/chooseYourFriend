@@ -18,7 +18,12 @@ module.exports = {
         loaders
     },
     node: {
-        fs: "empty"
+        fs: 'empty'
+    },
+    devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        compress: true,
+        port: 9000
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin({

@@ -1,8 +1,12 @@
-function vkHelper() {
-    function init(VK) {
+// ----- VK API helpers ----- //
+const API_ID = 6069515;
+const DEFAULT_API_VERSION = '5.64';
+
+class vkHelper {
+    init(VK) {
         return new Promise((resolve, reject) => {
             VK.init({
-                apiId: 6069515
+                apiId: API_ID
             });
 
             VK.Auth.login(data => {
@@ -15,9 +19,9 @@ function vkHelper() {
         });
     }
 
-    function api(method, options, VK) {
+    api(method, options, VK) {
         if (!options.v) {
-            options.v = '5.64';
+            options.v = DEFAULT_API_VERSION;
         }
 
         return new Promise((resolve, reject) => {
@@ -30,11 +34,6 @@ function vkHelper() {
             });
         });
     }
-
-    return {
-        init: init,
-        api: api
-    }
 }
 
-module.exports = vkHelper();
+module.exports = new vkHelper;

@@ -44,6 +44,11 @@ module.exports = function () {
                     'sass-loader'
                 ]
             })
-        }
+        },
+        {
+            test: /\.hbs$/,
+            exclude: /node_modules/,
+            loader: 'handlebars-loader'
+        },
     ];
 };

@@ -1,10 +1,9 @@
-function storageHelper() {
-    const LOCAL_STORAGE_NAMES = {
-        ALL: 'allFriends',
-        SAVED: 'savedFriends'
-    };
+// ----- Storage helpers ----- //
+const LOCAL_STORAGE_ALL = 'allFriends';
+const LOCAL_STORAGE_SAVED = 'savedFriends';
 
-    function getAllFriends() {
+class storageHelper {
+    getAllFriends() {
         let allFrineds = [];
 
         // Check if there is something in local storage
@@ -14,7 +13,7 @@ function storageHelper() {
         return allFrineds;
     }
 
-    function getSavedFriends() {
+    getSavedFriends() {
         let savedFrineds = [];
 
         // Check if there is something in local storage
@@ -24,8 +23,8 @@ function storageHelper() {
         return savedFrineds;
     }
 
-    function setToSavedFriends(id) {
-        let savedFriends = getSavedFriends();
+    setToSavedFriends(id) {
+        let savedFriends = this.getSavedFriends();
 
         // console.log('setToSavedFriends', savedFriends, savedFriends.indexOf(id) >= 0);
 
@@ -33,51 +32,44 @@ function storageHelper() {
             return;
         }
 
-        removeFromAllFriends(id);
+        this.removeFromAllFriends(id);
         savedFriends.push(id);
-        updateLocalStorage(LOCAL_STORAGE_NAMES.SAVED, savedFriends);
+        this.updateLocalStorage(LOCAL_STORAGE_SAVED, savedFriends);
 
         // console.log('setToSavedFriends', savedFriends, LOCAL_STORAGE_NAMES.SAVED);
     }
 
-    function setToAllFriends(id) {
-        let allFriends = getAllFriends();
+    setToAllFriends(id) {
+        let allFriends = this.getAllFriends();
 
         if (allFriends.indexOf(id) >= 0) {
             return;
         }
 
-        removeFromSavedFriends(id);
+        this.removeFromSavedFriends(id);
         allFriends.push(id);
-        updateLocalStorage(LOCAL_STORAGE_NAMES.ALL, allFriends);
+        this.updateLocalStorage(LOCAL_STORAGE_ALL, allFriends);
     }
 
-    function removeFromSavedFriends(id) {
-        let savedFriends = getSavedFriends();
+    removeFromSavedFriends(id) {
+        let savedFriends = this.getSavedFriends();
         let index = savedFriends.indexOf(id);
 
         savedFriends.splice(index, 1);
-        updateLocalStorage(LOCAL_STORAGE_NAMES.SAVED, savedFriends);
+        this.updateLocalStorage(LOCAL_STORAGE_SAVED, savedFriends);
     }
 
-    function removeFromAllFriends(id) {
-        let allFriends = getAllFriends();
+    removeFromAllFriends(id) {
+        let allFriends = this.getAllFriends();
         let index = allFriends.indexOf(id);
 
         allFriends.splice(index, 1);
-        updateLocalStorage(LOCAL_STORAGE_NAMES.ALL, allFriends);
+        this.updateLocalStorage(LOCAL_STORAGE_ALL, allFriends);
     }
 
-    function updateLocalStorage(type, model) { // eslint-disable-line
+    updateLocalStorage(type, model) { // eslint-disable-line
         // Update local storage with type and model
-    }
-
-    return {
-        getAllFriends: getAllFriends,
-        getSavedFriends: getSavedFriends,
-        setToSavedFriends: setToSavedFriends,
-        setToAllFriends: setToAllFriends
     }
 }
 
-module.exports = storageHelper();
+module.exports = new storageHelper;
