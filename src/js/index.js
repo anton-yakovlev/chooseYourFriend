@@ -6,6 +6,10 @@ require('../css/styles.scss');
 const vkHelper = require('./vkHelper');
 const viewHelper = require('./viewHelper');
 const listenerHelper = require('./listenersHelper');
+const storageHelper = require('./storageHelper');
+
+// ----- Start set listeners ----- //
+listenerHelper.setHandlers();
 
 // ----- Start App ----- //
 try {
@@ -18,11 +22,18 @@ try {
             }, VK) // eslint-disable-line
         })
         .then(friends => {
-            viewHelper.showAllFriends(friends);
-            listenerHelper.setHandlers();
+            let allFriendsStorage = storageHelper.getAllFriends();
+            let savedFriendsStorage = storageHelper.getSavedFriends();
+
+            if (!allFriendsStorage && !savedFriendsStorage) {
+                storageHelper.setAllFriends(friends);
+            }
+
+            viewHelper.showAllFriends(allFriendsStorage);
+            viewHelper.showSavedFriends(savedFriendsStorage);
         })
         .catch(e => {
-            throw new Error(e.message);
+            viewHelper.showError(e.message);
         });
 } catch (e) {
     viewHelper.showError(e.message);

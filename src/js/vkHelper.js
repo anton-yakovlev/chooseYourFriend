@@ -29,7 +29,7 @@ class vkHelper {
                 if (data.error) {
                     reject(new Error(data.error.error_msg));
                 } else {
-                    resolve(data.response);
+                    resolve(data.response.items);
                 }
             });
         });

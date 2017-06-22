@@ -7,14 +7,14 @@ const removeClassName = 'user-list__item-action_remove';
 const reloadAfterErrorId = 'reloadAfterError';
 
 class clickListeners {
-    static clickHandler(e) {
+    clickHandler(e) {
         let target = e.target;
 
         // ----- Click listener for plus button ----- //
         if (target.classList.contains(plusClassName)) {
             let currentFriendId = target.closest('.' + friendItemClassName).dataset.id;
 
-            storageHelper.setToSavedFriends(currentFriendId);
+            storageHelper.update(currentFriendId);
         }
 
         // ----- Click listener for remove button ----- //
