@@ -2,7 +2,7 @@
 const API_ID = 6069515;
 const DEFAULT_API_VERSION = '5.64';
 
-class vkHelper {
+class VkHelper {
     init(VK) {
         return new Promise((resolve, reject) => {
             VK.init({
@@ -36,4 +36,4 @@ class vkHelper {
     }
 }
 
-module.exports = new vkHelper;
+module.exports = new VkHelper;

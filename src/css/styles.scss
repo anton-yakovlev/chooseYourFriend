@@ -41,6 +41,7 @@ body {
   &__body {
     flex: 1;
     background-color: #fff;
+    user-select: none;
   }
 
   &__footer {
@@ -167,6 +168,7 @@ body {
     border-radius: $defaultStep / 4;
     padding: $defaultStep;
     transition: all .1s;
+    cursor: move;
 
     &:hover {
       background-color: $color-hover;

@@ -8,7 +8,7 @@ const savedFriendsListElement = document.getElementById('savedFriendsList');
 const friendAppElement = document.getElementById('friendAppContainer');
 const DEFAULT_ERROR_TEXT = 'Что-то пошло не так, пожалуйста, попробуйте перезагрузить страницу';
 
-class viewHelper {
+class ViewHelper {
     // ----- Show all friends in left panel----- //
     showAllFriends(friends) {
         let html = '';
@@ -45,4 +45,4 @@ class viewHelper {
     }
 }
 
-module.exports = new viewHelper;
+module.exports = new ViewHelper;

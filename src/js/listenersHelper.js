@@ -9,7 +9,7 @@ const saveButtonId = 'saveButton';
 const STORAGE_ALL = 'allFriends';
 const STORAGE_SAVED = 'savedFriends';
 
-class clickListeners {
+class Listeners {
     clickHandler(e) {
         let target = e.target;
 
@@ -78,9 +78,19 @@ class clickListeners {
         }
     }
 
+    dragStartHandler(e) {
+        let target = e.target;
+
+        // ----- Drag start listener for friend item ----- //
+        if (target.classList.contains(friendItemClassName)) {
+
+        }
+    }
+
     setHandlers() {
         document.body.addEventListener('click', this.clickHandler);
+        document.body.addEventListener('dragstart', this.dragStartHandler);
     }
 }
 
-module.exports = new clickListeners;
+module.exports = new Listeners;

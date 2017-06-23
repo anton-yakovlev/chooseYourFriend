@@ -6,7 +6,7 @@ const currentStorage = {
     [STORAGE_SAVED]: []
 };
 
-class storageHelper {
+class StorageHelper {
     saveLocalStorage() {
         const savedFriends = this.getCurrentStorage(STORAGE_SAVED);
 
@@ -50,4 +50,4 @@ class storageHelper {
     }
 }
 
-module.exports = new storageHelper;
+module.exports = new StorageHelper;
