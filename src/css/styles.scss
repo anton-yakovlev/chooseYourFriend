@@ -3,7 +3,7 @@ $color-default-bg: #ccc;
 $color-gray-text: #777;
 $color-footer-bg: #eee;
 $color-hover: #f5f5f5;
-$color-red: #ff0000;
+$color-red: #4e729a;
 $appWidth: 800px;
 $appHeight: 600px;
 $defaultStep: 8px;
@@ -109,6 +109,7 @@ body {
           bottom: 0;
           left: $defaultStep * 2;
           overflow-y: auto;
+          overflow-x: hidden;
         }
       }
     }
@@ -144,6 +145,14 @@ body {
     color: $color-red;
     background-color: #fff;
     border-color: $color-red;
+  }
+
+  &:active {
+    background-color: darken($color-hover, 10%);
+  }
+
+  &:focus {
+    outline: 0;
   }
 }
 
