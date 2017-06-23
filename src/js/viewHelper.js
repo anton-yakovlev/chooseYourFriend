@@ -11,11 +11,9 @@ const DEFAULT_ERROR_TEXT = 'Что-то пошло не так, пожалуйс
 class viewHelper {
     // ----- Show all friends in left panel----- //
     showAllFriends(friends) {
-        if (!friends) {
-            return;
-        }
-
         let html = '';
+
+        allFriendsListElement.innerHTML = '';
 
         friends.forEach((friend) => {
             friend.action = ACTIONS_ADD;
@@ -27,11 +25,9 @@ class viewHelper {
 
     // ----- Show saved friends in right panel----- //
     showSavedFriends(friends) {
-        if (!friends) {
-            return;
-        }
-
         let html = '';
+
+        savedFriendsListElement.innerHTML = '';
 
         friends.forEach((friend) => {
             friend.action = ACTIONS_REMOVE;

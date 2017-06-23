@@ -192,37 +192,44 @@ body {
       flex: none;
       width: $avatarSize / 2;
       height: $avatarSize / 2;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: all .1s;
+      padding: $defaultStep;
       position: relative;
 
       &:before,
       &:after {
         content: '';
         display: block;
-        width: 100%;
+        width: 60%;
         background-color: $color-default-bg;
         height: $defaultStep / 2;
         position: absolute;
         top: 50%;
-        left: 0;
-        cursor: pointer;
+        left: 50%;
         transition: all .1s;
       }
 
+      &:before {
+        transform: translate(-50%, -50%);
+      }
+
+      &:after {
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+
       &:hover {
+        background-color: lighten($color-default-bg, 10%);
+
         &:before,
         &:after {
-          background-color: darken($color-default-bg, 10%);
+          background-color: darken($color-default-bg, 20%);
         }
       }
 
-      &_add {
-        &:before {
-          transform: translateY(-50%);
-        }
-
-        &:after {
-          transform: translateY(-50%) rotate(90deg);
-        }
+      &_remove {
+        transform: rotate(45deg);
       }
     }
   }

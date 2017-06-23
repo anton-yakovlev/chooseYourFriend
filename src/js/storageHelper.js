@@ -1,27 +1,52 @@
 // ----- Storage helpers ----- //
-const LOCAL_STORAGE_ALL = 'allFriends';
-const LOCAL_STORAGE_SAVED = 'savedFriends';
+const STORAGE_ALL = 'allFriends';
+const STORAGE_SAVED = 'savedFriends';
+const currentStorage = {
+    [STORAGE_ALL]: [],
+    [STORAGE_SAVED]: []
+};
 
 class storageHelper {
-    getAllFriends() {
-        return JSON.parse(localStorage.getItem(LOCAL_STORAGE_ALL)) || null;
+    saveLocalStorage() {
+        const savedFriends = this.getCurrentStorage(STORAGE_SAVED);
+
+        localStorage.removeItem(STORAGE_SAVED);
+        localStorage.setItem(STORAGE_SAVED, JSON.stringify(savedFriends));
     }
 
-    getSavedFriends() {
-        return JSON.parse(localStorage.getItem(LOCAL_STORAGE_SAVED)) || null;
+    getLocalStorage(storageName = STORAGE_SAVED) {
+        return JSON.parse(localStorage.getItem(storageName)) || null;
     }
 
-    setAllFriends(model) {
-        localStorage.setItem(LOCAL_STORAGE_ALL, JSON.stringify(model));
+    setCurrentStorage(model, storageName) {
+        currentStorage[storageName] = model;
     }
 
-    setSavedFriends(model) {
-        localStorage.setItem(LOCAL_STORAGE_SAVED, JSON.stringify(model));
+    getCurrentStorage(storageName) {
+        return currentStorage[storageName];
     }
 
-    update(storageName, model) {
-        localStorage.removeItem(storageName);
-        localStorage.setItem(storageName, model);
+    normalizeFriends(model) {
+        const localStorageFriends = this.getLocalStorage();
+
+        if (!localStorageFriends) {
+            return {
+                [STORAGE_ALL]: model
+            }
+        }
+
+        const localStorageFriendsIds = localStorageFriends.map(item =>{
+            return item.id;
+        });
+
+        const allFriends = model.filter(item => {
+            return localStorageFriendsIds.indexOf(item.id) < 0;
+        });
+
+        return {
+            [STORAGE_ALL]: allFriends,
+            [STORAGE_SAVED]: localStorageFriends
+        }
     }
 }
 

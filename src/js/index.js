@@ -7,6 +7,8 @@ const vkHelper = require('./vkHelper');
 const viewHelper = require('./viewHelper');
 const listenerHelper = require('./listenersHelper');
 const storageHelper = require('./storageHelper');
+const STORAGE_ALL = 'allFriends';
+const STORAGE_SAVED = 'savedFriends';
 
 // ----- Start set listeners ----- //
 listenerHelper.setHandlers();
@@ -22,12 +24,12 @@ try {
             }, VK) // eslint-disable-line
         })
         .then(friends => {
-            let allFriendsStorage = storageHelper.getAllFriends();
-            let savedFriendsStorage = storageHelper.getSavedFriends();
+            let currentStorage = storageHelper.normalizeFriends(friends);
+            let allFriendsStorage = currentStorage[STORAGE_ALL] || [];
+            let savedFriendsStorage = currentStorage[STORAGE_SAVED] || [];
 
-            if (!allFriendsStorage && !savedFriendsStorage) {
-                storageHelper.setAllFriends(friends);
-            }
+            storageHelper.setCurrentStorage(allFriendsStorage, STORAGE_ALL);
+            storageHelper.setCurrentStorage(savedFriendsStorage, STORAGE_SAVED);
 
             viewHelper.showAllFriends(allFriendsStorage);
             viewHelper.showSavedFriends(savedFriendsStorage);
