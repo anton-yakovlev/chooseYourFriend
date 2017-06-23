@@ -31,8 +31,8 @@ try {
             storageHelper.setCurrentStorage(allFriendsStorage, STORAGE_ALL);
             storageHelper.setCurrentStorage(savedFriendsStorage, STORAGE_SAVED);
 
-            viewHelper.showAllFriends(allFriendsStorage);
-            viewHelper.showSavedFriends(savedFriendsStorage);
+            viewHelper.renderFriends(allFriendsStorage, STORAGE_ALL);
+            viewHelper.renderFriends(savedFriendsStorage, STORAGE_SAVED);
         })
         .catch(e => {
             viewHelper.showError(e.message);

@@ -3,38 +3,36 @@ const friendItem = require('./../hbs/friendItem.hbs');
 const errorTemplate = require('./../hbs/error.hbs');
 const ACTIONS_ADD = 'add';
 const ACTIONS_REMOVE = 'remove';
-const allFriendsListElement = document.getElementById('allFriendsList');
-const savedFriendsListElement = document.getElementById('savedFriendsList');
+const STORAGE_ALL = 'allFriends';
+const STORAGE_SAVED = 'savedFriends';
+const allFriendsListElement = document.querySelector('#allFriendsList .user-list');
+const savedFriendsListElement = document.querySelector('#savedFriendsList .user-list');
 const friendAppElement = document.getElementById('friendAppContainer');
 const DEFAULT_ERROR_TEXT = 'Что-то пошло не так, пожалуйста, попробуйте перезагрузить страницу';
+const listElements = {
+    [STORAGE_ALL]: {
+        element: allFriendsListElement,
+        action: ACTIONS_ADD
+    },
+    [STORAGE_SAVED]: {
+        element: savedFriendsListElement,
+        action: ACTIONS_REMOVE
+    }
+};
 
 class ViewHelper {
     // ----- Show all friends in left panel----- //
-    showAllFriends(friends) {
+    renderFriends(friends, storageName) {
         let html = '';
 
-        allFriendsListElement.innerHTML = '';
+        listElements[storageName].element.innerHTML = '';
 
         friends.forEach((friend) => {
-            friend.action = ACTIONS_ADD;
+            friend.action = listElements[storageName].action;
             html += friendItem(friend);
         });
 
-        allFriendsListElement.innerHTML = html;
-    }
-
-    // ----- Show saved friends in right panel----- //
-    showSavedFriends(friends) {
-        let html = '';
-
-        savedFriendsListElement.innerHTML = '';
-
-        friends.forEach((friend) => {
-            friend.action = ACTIONS_REMOVE;
-            html += friendItem(friend);
-        });
-
-        savedFriendsListElement.innerHTML = html;
+        listElements[storageName].element.innerHTML = html;
     }
 
     // ----- Show error ----- //
