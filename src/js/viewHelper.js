@@ -1,4 +1,6 @@
-// ----- All view methods ----- //
+// ----- View methods ----- //
+
+const storageHelper = require('./storageHelper');
 const friendItem = require('./../hbs/friendItem.hbs');
 const errorTemplate = require('./../hbs/error.hbs');
 const ACTIONS_ADD = 'add';
@@ -21,21 +23,31 @@ const listElements = {
 };
 
 class ViewHelper {
-    // ----- Show all friends in left panel----- //
+    // ----- Render friend list in target ----- //
     renderFriends(friends, storageName) {
         let html = '';
 
         listElements[storageName].element.innerHTML = '';
 
         friends.forEach((friend) => {
-            friend.action = listElements[storageName].action;
-            html += friendItem(friend);
+            if (this.isVisible(friend, storageName)) {
+                friend.action = listElements[storageName].action;
+                html += friendItem(friend);
+            }
         });
 
         listElements[storageName].element.innerHTML = html;
     }
 
-    // ----- Show error ----- //
+    // ----- Check current search filtering ----- //
+    isVisible(item, storageName) {
+        let currentSearch = storageHelper.getSearchOption(storageName);
+        let source = item.first_name + item.last_name;
+
+        return !currentSearch || source.indexOf(currentSearch) > -1;
+    }
+
+    // ----- Show errors ----- //
     showError(message) {
         friendAppElement.innerHTML = errorTemplate({
             message: 'Ошибка: ' + message || DEFAULT_ERROR_TEXT

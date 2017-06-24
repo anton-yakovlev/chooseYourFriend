@@ -1,4 +1,5 @@
-// ----- VK API helpers ----- //
+// ----- VK API methods ----- //
+
 const API_ID = 6069515;
 const DEFAULT_API_VERSION = '5.64';
 

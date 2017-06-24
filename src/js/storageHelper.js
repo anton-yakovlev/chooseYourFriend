@@ -1,9 +1,16 @@
-// ----- Storage helpers ----- //
+// ----- Storage methods ----- //
+
 const STORAGE_ALL = 'allFriends';
 const STORAGE_SAVED = 'savedFriends';
 const currentStorage = {
-    [STORAGE_ALL]: [],
-    [STORAGE_SAVED]: []
+    items: {
+        [STORAGE_ALL]: [],
+        [STORAGE_SAVED]: []
+    },
+    search: {
+        [STORAGE_ALL]: '',
+        [STORAGE_SAVED]: ''
+    }
 };
 
 class StorageHelper {
@@ -19,11 +26,19 @@ class StorageHelper {
     }
 
     setCurrentStorage(model, storageName) {
-        currentStorage[storageName] = model;
+        currentStorage.items[storageName] = model;
     }
 
     getCurrentStorage(storageName) {
-        return currentStorage[storageName];
+        return currentStorage.items[storageName];
+    }
+
+    setSearchOption(storageName, value) {
+        currentStorage.search[storageName] = value;
+    }
+
+    getSearchOption(storageName) {
+        return currentStorage.search[storageName];
     }
 
     normalizeFriends(model) {
@@ -35,7 +50,7 @@ class StorageHelper {
             }
         }
 
-        const localStorageFriendsIds = localStorageFriends.map(item =>{
+        const localStorageFriendsIds = localStorageFriends.map(item => {
             return item.id;
         });
 

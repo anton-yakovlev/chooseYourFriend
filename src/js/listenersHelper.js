@@ -1,4 +1,5 @@
-// ----- Click listeners for all elements with delegation ----- //
+// ----- Event listeners ----- //
+
 const storageHelper = require('./storageHelper');
 const viewHelper = require('./viewHelper');
 const friendItemClassName = 'user-list__item';
@@ -11,9 +12,14 @@ const STORAGE_SAVED = 'savedFriends';
 const userListClassName = 'friend-app__columns-item-body-inner';
 const dndUserListEnterClassName = 'friend-app__columns-item-body-inner_dnd-enter';
 const dndProcessClassName = 'user-list__item_dnd';
+const inputClassName = 'friend-app__search-input';
 const listNormalize = {
     allFriendsList: STORAGE_ALL,
     savedFriendsList: STORAGE_SAVED
+};
+const searchNormalize = {
+    searchAllFriendsInput: STORAGE_ALL,
+    searchListFriendsInput: STORAGE_SAVED
 };
 
 class Listeners {
@@ -80,6 +86,7 @@ class Listeners {
         let target = e.target;
         let isPositionInsideList = !!target.closest('.' + userListClassName);
 
+        // ----- Target place is inside the list of friends ----- //
         if (isPositionInsideList) {
             e.preventDefault();
             e.dataTransfer.dropEffect = 'move';
@@ -100,12 +107,14 @@ class Listeners {
         let allFriends = document.body.querySelectorAll('.' + dndProcessClassName);
         let allInners = document.body.querySelectorAll('.' + dndUserListEnterClassName);
 
+        // ----- Clear classes of all friends ----- //
         if (allFriends) {
             allFriends.forEach(item => {
                 item.classList.remove(dndProcessClassName);
             })
         }
 
+        // ----- Clear classes of all inners ----- //
         if (allInners) {
             allInners.forEach(item => {
                 item.classList.remove(dndUserListEnterClassName);
@@ -115,7 +124,7 @@ class Listeners {
 
     dropHandler(e) {
         let friendId = e.dataTransfer.getData('text');
-        let friendElement = document.querySelector('[data-id="'+ friendId + '"]');
+        let friendElement = document.querySelector('[data-id="' + friendId + '"]');
         let sourceId = friendElement.closest('.' + userListClassName).id;
         let destinationId = e.target.closest('.' + userListClassName).id;
 
@@ -127,6 +136,21 @@ class Listeners {
         this.dragEndHandler();
     }
 
+    // -----  keyup listener ----- //
+    keyHandler(e) {
+        let target = e.target;
+
+        // ----- Input keyup ----- //
+        if (target.classList.contains(inputClassName)) {
+            let friendListId = searchNormalize[target.id];
+            let targetValue = target.value;
+            let friendsList = storageHelper.getCurrentStorage(searchNormalize[target.id]);
+
+            storageHelper.setSearchOption(friendListId, targetValue);
+            viewHelper.renderFriends(friendsList, friendListId);
+        }
+    }
+
     setHandlers() {
         document.body.addEventListener('click', (e) => this.clickHandler(e));
         document.body.addEventListener('dragstart', (e) => this.dragStartHandler(e));
@@ -134,6 +158,7 @@ class Listeners {
         document.body.addEventListener('dragenter', (e) => this.dragEnterHandler(e));
         document.body.addEventListener('dragend', (e) => this.dragEndHandler(e));
         document.body.addEventListener('drop', (e) => this.dropHandler(e));
+        document.body.addEventListener('keyup', (e) => this.keyHandler(e));
     }
 }
 
